@@ -1,0 +1,11 @@
+#../source/confusion_matrices_sst.py -t bioprefix ../data/dup/sara.politiken5-6.tsv ../data/dup/idathomas.politiken5-6.tsv
+#row, col, support, norm_over_row_i_and_col_j
+B	B	1046.0	0.375044818932
+B	I	21.5	0.0136724960254
+B	O	327.0	0.0989110707804
+I	B	21.5	0.0136724960254
+I	I	145.0	0.407303370787
+I	O	11.5	0.0055037090213
+O	B	327.0	0.0989110707804
+O	I	11.5	0.0055037090213
+O	O	1573.0	0.411456970965
