@@ -3,19 +3,7 @@ import sys
 from collections import Counter
 
 
-parser = argparse.ArgumentParser(description="Generates confusion matrices for supersense-annotated data")
-parser.add_argument("file1",   metavar="FILE", help="name of the tagged file")
-parser.add_argument("file2", metavar="FILE", help="name of the tagged file")
-parser.add_argument("-lc","--labelcolumnindex", help="column index of the label, default -1", required=False, type=int, default=-1) #column index as array indices, starting from 0
-parser.add_argument("-t","--typeofmatrix", help="""wholetags (e.g.  B-noun.person vs I-verb.cognition)
-                                                 supersense (e.g. )
-                                                 nopos (e.g. cognition vs. communication, ignoring noun.x or verb.x)
-                                                 bioprefix (headpos+directionality)
-                                                 """, required=False, default="wholetags")  # headdistance, regular, headpos
 
-
-
-args = parser.parse_args()
 
 
 def wholetags(tag):
@@ -73,6 +61,21 @@ def coltotals(M,L):
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Generates confusion matrices for supersense-annotated data")
+    parser.add_argument("file1",   metavar="FILE", help="name of the tagged file")
+    parser.add_argument("file2", metavar="FILE", help="name of the tagged file")
+    parser.add_argument("-lc","--labelcolumnindex", help="column index of the label, default -1", required=False, type=int, default=-1) #column index as array indices, starting from 0
+    parser.add_argument("-t","--typeofmatrix", help="""wholetags (e.g.  B-noun.person vs I-verb.cognition)
+                                                     supersense (e.g. )
+                                                     nopos (e.g. cognition vs. communication, ignoring noun.x or verb.x)
+                                                     bioprefix (headpos+directionality)
+                                                     """, required=False, default="wholetags")  # headdistance, regular, headpos
+
+
+
+    args = parser.parse_args()
+
+
 
     M = Counter()
     L = set()
