@@ -62,13 +62,13 @@ def coltotals(M,L):
 
 def main():
     parser = argparse.ArgumentParser(description="Generates confusion matrices for supersense-annotated data")
-    parser.add_argument("file1",   metavar="FILE", help="name of the tagged file")
-    parser.add_argument("file2", metavar="FILE", help="name of the tagged file")
+    parser.add_argument("--file1",   metavar="FILE", help="name of the tagged file")
+    parser.add_argument("--file2", metavar="FILE", help="name of the tagged file")
     parser.add_argument("-lc","--labelcolumnindex", help="column index of the label, default -1", required=False, type=int, default=-1) #column index as array indices, starting from 0
     parser.add_argument("-t","--typeofmatrix", help="""wholetags (e.g.  B-noun.person vs I-verb.cognition)
                                                      supersense (e.g. )
                                                      nopos (e.g. cognition vs. communication, ignoring noun.x or verb.x)
-                                                     bioprefix (headpos+directionality)
+                                                     bioprefix (B vs I vs O)
                                                      """, required=False, default="wholetags")  # headdistance, regular, headpos
 
 
@@ -83,9 +83,26 @@ def main():
     labels1 = []
     labels2 = []
 
-    #if args.typeofmatrix == "wholetags":
-    labels_orig1 = getColumn(args.file1, args.labelcolumnindex)
-    labels_orig2 = getColumn(args.file2, args.labelcolumnindex)
+    if args.file1 and args.file2:
+        #if args.typeofmatrix == "wholetags":
+        labels_orig1 = getColumn(args.file1, args.labelcolumnindex)
+        labels_orig2 = getColumn(args.file2, args.labelcolumnindex)
+
+    elif args.file1: #trick for triple annotations in twitter
+                labels_origA = []
+                labels_origB = []
+                labels_origC = []
+
+
+                for labels in getColumn(args.file1, args.labelcolumnindex):
+                    A,B,C = labels.strip().split(",")
+                    labels_origA.append(A)
+                    labels_origB.append(B)
+                    labels_origC.append(C)
+
+                labels_orig1 = labels_origA + labels_origA + labels_origB
+                labels_orig2 = labels_origB + labels_origC + labels_origC
+
     labels1 = [globals()[args.typeofmatrix](label) for label in labels_orig1]
     labels2 = [globals()[args.typeofmatrix](label) for label in labels_orig2]
     for l1, l2 in zip(labels1,labels2):
