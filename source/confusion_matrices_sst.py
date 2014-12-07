@@ -84,10 +84,10 @@ def main():
     labels2 = []
 
     #if args.typeofmatrix == "wholetags":
-    labels1 = getColumn(args.file1, args.labelcolumnindex)
-    labels2 = getColumn(args.file2, args.labelcolumnindex)
-    labels1 = [globals()[args.typeofmatrix](label) for label in labels1]
-    labels2 = [globals()[args.typeofmatrix](label) for label in labels2]
+    labels_orig1 = getColumn(args.file1, args.labelcolumnindex)
+    labels_orig2 = getColumn(args.file2, args.labelcolumnindex)
+    labels1 = [globals()[args.typeofmatrix](label) for label in labels_orig1]
+    labels2 = [globals()[args.typeofmatrix](label) for label in labels_orig2]
     for l1, l2 in zip(labels1,labels2):
         L.add(l1)
         L.add(l2)
@@ -96,18 +96,21 @@ def main():
 
 
     print "#"+" ".join(sys.argv)
+    print "#Note support is for the internal representation (e.g. noun.person instead of B-noun.person), not for the printed key. There will be repetitions for anything for wholetags"
     print "#row, col, support, norm_over_row_i_and_col_j"
     T = sum(M.values())
     rowtots = rowtotals(M,L)
     coltots= coltotals(M,L)
     #print rowtots
     #print coltots
-    for l1 in sorted(L):
-        for l2 in sorted(L):
-            if M[l1,l2] == 0.0:
+    for l1 in sorted(set(labels_orig1)):
+        for l2 in sorted(set(labels_orig2)):
+            lcm1 = globals()[args.typeofmatrix](l1)
+            lcm2 = globals()[args.typeofmatrix](l2)
+            if M[lcm1,lcm2] == 0.0:
                 outline = [l1, l2, 0.0, 0.0 ]
             else:
-                outline = [l1, l2, M[l1,l2], M[(l1,l2)]/(rowtots[l1] + coltots[l2])]
+                outline = [l1, l2, M[lcm1,l2], M[(lcm1,lcm2)]/(rowtots[lcm1] + coltots[lcm2])]
             print "\t".join([str(x) for x in outline])
 
 
