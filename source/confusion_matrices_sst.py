@@ -64,6 +64,8 @@ def main():
     parser = argparse.ArgumentParser(description="Generates confusion matrices for supersense-annotated data")
     parser.add_argument("--file1",   metavar="FILE", help="name of the tagged file")
     parser.add_argument("--file2", metavar="FILE", help="name of the tagged file")
+    parser.add_argument("--format", metavar="FILE", help="pair/matrix - pair per line or matrix",default="pair")
+
     parser.add_argument("-lc","--labelcolumnindex", help="column index of the label, default -1", required=False, type=int, default=-1) #column index as array indices, starting from 0
     parser.add_argument("-t","--typeofmatrix", help="""wholetags (e.g.  B-noun.person vs I-verb.cognition)
                                                      supersense (e.g. )
@@ -111,24 +113,66 @@ def main():
         M[(l1,l2)]+=0.5
         M[(l2,l1)]+=0.5
 
+    if args.format == "pair":
+        print "#"+" ".join(sys.argv)
+        print "#Note support is for the internal representation (e.g. noun.person instead of B-noun.person), not for the printed key. There will be repetitions for anything for wholetags"
+        print "#row, col, support, norm_over_row_i_and_col_j"
+        T = sum(M.values())
+        rowtots = rowtotals(M,L)
+        coltots= coltotals(M,L)
+        #print rowtots
+        #print coltots
+        for l1 in sorted(set(labels_orig1)):
+            for l2 in sorted(set(labels_orig2)):
+                lcm1 = globals()[args.typeofmatrix](l1)
+                lcm2 = globals()[args.typeofmatrix](l2)
+                if M[lcm1,lcm2] == 0.0:
+                    outline = [l1, l2, 0.0, 0.0 ]
+                else:
+                    outline = [l1, l2, M[lcm1,lcm2], M[(lcm1,lcm2)]/(rowtots[lcm1] + coltots[lcm2])]
+                print "\t".join([str(x) for x in outline])
+    else:
 
-    print "#"+" ".join(sys.argv)
-    print "#Note support is for the internal representation (e.g. noun.person instead of B-noun.person), not for the printed key. There will be repetitions for anything for wholetags"
-    print "#row, col, support, norm_over_row_i_and_col_j"
-    T = sum(M.values())
-    rowtots = rowtotals(M,L)
-    coltots= coltotals(M,L)
-    #print rowtots
-    #print coltots
-    for l1 in sorted(set(labels_orig1)):
-        for l2 in sorted(set(labels_orig2)):
-            lcm1 = globals()[args.typeofmatrix](l1)
-            lcm2 = globals()[args.typeofmatrix](l2)
-            if M[lcm1,lcm2] == 0.0:
-                outline = [l1, l2, 0.0, 0.0 ]
-            else:
-                outline = [l1, l2, M[lcm1,l2], M[(lcm1,lcm2)]/(rowtots[lcm1] + coltots[lcm2])]
-            print "\t".join([str(x) for x in outline])
+        sense_to_integer={}
+        for line in open("../data/res/da_map_bio.txt").readlines():
+            line = line.strip()
+            if line:
+                val,key = line.split("\t")
+                sense_to_integer[key] = val
+
+
+        T = sum(M.values())
+        rowtots = rowtotals(M,L)
+        coltots= coltotals(M,L)
+        #print rowtots
+        #print coltots
+        Mout = Counter()
+
+        intkeys = []
+        for l1 in sorted(set(labels_orig1)):
+           for l2 in sorted(set(labels_orig2)):
+               lcm1 = globals()[args.typeofmatrix](l1)
+               lcm2 = globals()[args.typeofmatrix](l2)
+               if M[lcm1,lcm2] == 0.0:
+                   Mout[(l1,l2)] = 0.0
+               else:
+                   Mout[(l1,l2)] = M[(lcm1,lcm2)]/(rowtots[lcm1] + coltots[lcm2])
+
+        # print ",".join([str(x) for x in (range(1,max(intkeys)+1))])
+        # for x in range(1,max(intkeys)+1):
+        #     acc = [x]
+        #     for y in range(1,max(intkeys)+1):
+        #         acc.append(1.0-Mintegers[(x,y)])
+        #     print ",".join([str(s) for s in acc])
+        all_labels = sorted(set(labels_orig1+labels_orig2))
+        print ",".join(all_labels)
+        for x in all_labels:
+             acc = [x]
+             for y in all_labels:
+                 acc.append(1.0-Mout[(x,y)])
+             print ",".join([str(s) for s in acc])
+
+
 
 
 main()
