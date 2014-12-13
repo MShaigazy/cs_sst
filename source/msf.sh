@@ -1,0 +1,15 @@
+python mfs_run.py ../data/gold/gold.test.all.tsv  ../data/gold/gold.train.politiken.tsv da > ../data/rungsted_preds/mfs/test.all.mfs
+python mfs_run.py ../data/gold/gold.test.bente.tsv ../data/gold/gold.train.politiken.tsv da > ../data/rungsted_preds/mfs/test.bente.mfs
+python mfs_run.py ../data/gold/gold.test.folketing.tsv ../data/gold/gold.train.politiken.tsv da > ../data/rungsted_preds/mfs/test.folketing.mfs
+python mfs_run.py ../data/gold/gold.test.mangamania.tsv ../data/gold/gold.train.politiken.tsv da > ../data/rungsted_preds/mfs/test.mangamania.mfs
+python mfs_run.py ../data/gold/gold.test.politiken.tsv ../data/gold/gold.train.politiken.tsv da > ../data/rungsted_preds/mfs/test.politiken.mfs
+python mfs_run.py ../data/gold/gold.test.selvhenter.tsv ../data/gold/gold.train.politiken.tsv da > ../data/rungsted_preds/mfs/test.selvhenter.mfs
+python mfs_run.py ../data/gold/gold.test.seoghoer.tsv ../data/gold/gold.train.politiken.tsv da > ../data/rungsted_preds/mfs/test.seoghoer.mfs
+python mfs_run.py ~/data/full/SEM.BIO.conll.fold1  ~/data/full/mfs1 en > ../data/rungsted_preds/mfs/SEM.fold1.mfs
+python mfs_run.py ~/data/full/SEM.BIO.conll.fold2  ~/data/full/mfs2 en > ../data/rungsted_preds/mfs/SEM.fold2.mfs
+python mfs_run.py ~/data/full/SEM.BIO.conll.fold3  ~/data/full/mfs3  en > ../data/rungsted_preds/mfs/SEM.fold3.mfs
+python mfs_run.py ~/data/full/SEM.BIO.conll.fold4  ~/data/full/mfs4 en > ../data/rungsted_preds/mfs/SEM.fold4.mfs
+python mfs_run.py ~/data/full/SEM.BIO.conll.fold5  ~/data/full/mfs5 en > ../data/rungsted_preds/mfs/SEM.fold5.mfs
+python mfs_run.py ~/data/full/lowlands.sst  ~/data/full/SEM.BIO.conll en > ../data/rungsted_preds/mfs/lowlands.sst.mfs
+python mfs_run.py ~/data/full/ritter.dev  ~/data/full/SEM.BIO.conll en > ../data/rungsted_preds/mfs/ritter.dev.mfs
+python mfs_run.py ~/data/full/ritter.test  ~/data/full/SEM.BIO.conll en > ../data/rungsted_preds/mfs/ritter.test.mfs

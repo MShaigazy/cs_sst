@@ -115,7 +115,7 @@ def main():
 
     if args.format == "pair":
         print "#"+" ".join(sys.argv)
-        print "#Note support is for the internal representation (e.g. noun.person instead of B-noun.person), not for the printed key. There will be repetitions for anything for wholetags"
+        print "#Note support is for the internal representation (e.g. noun.person instead of B-noun.person), not for the printed key. There will be repetitions for anything but wholetags"
         print "#row, col, support, norm_over_row_i_and_col_j"
         T = sum(M.values())
         rowtots = rowtotals(M,L)
@@ -174,6 +174,5 @@ def main():
 
 
 
-
-main()
-
+if __name__ == "__main__":
+    main()
